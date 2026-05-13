@@ -9,14 +9,10 @@
     body { font-family: system-ui, sans-serif; }
     .neon-text { text-shadow: 0 0 20px #10b981, 0 0 40px #10b981; }
     .hero-bg { background: linear-gradient(135deg, #0f172a 0%, #1e2937 100%); }
-    canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.15; pointer-events: none; }
   </style>
 </head>
-<body class="bg-zinc-950 text-white hero-bg min-h-screen overflow-hidden">
-  <!-- Animated Chart Background -->
-  <canvas id="chart"></canvas>
-
-  <div class="max-w-4xl mx-auto px-6 py-16 text-center relative z-10">
+<body class="bg-zinc-950 text-white hero-bg min-h-screen">
+  <div class="max-w-4xl mx-auto px-6 py-16 text-center">
     <h1 class="text-6xl font-bold tracking-tighter neon-text mb-3">FORTUNE MAKING</h1>
     <h1 class="text-6xl font-bold tracking-tighter neon-text text-emerald-400 mb-8">TRADING SYSTEM</h1>
     <p class="text-2xl text-emerald-400 mb-12">Developed By @FiNARTHiS_FMTS</p>
@@ -50,65 +46,5 @@
       <a href="privacy.html" class="underline hover:text-emerald-400">Privacy Policy</a>
     </p>
   </div>
-
-  <script>
-    const canvas = document.getElementById('chart');
-    const ctx = canvas.getContext('2d');
-    
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    let points = [];
-    let time = 0;
-
-    function drawChart() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Generate new point
-      if (points.length === 0 || time % 8 === 0) {
-        const lastY = points.length > 0 ? points[points.length-1].y : canvas.height * 0.6;
-        const newY = lastY + (Math.random() * 80 - 40);
-        points.push({ x: canvas.width, y: Math.max(100, Math.min(canvas.height - 100, newY)) });
-      }
-
-      // Draw line
-      ctx.beginPath();
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 3;
-      for (let i = 0; i < points.length; i++) {
-        const x = points[i].x - (time * 3);
-        if (i === 0) ctx.moveTo(x, points[i].y);
-        else ctx.lineTo(x, points[i].y);
-      }
-      ctx.stroke();
-
-      // Draw glowing dots
-      ctx.fillStyle = '#10b981';
-      for (let i = 0; i < points.length; i++) {
-        const x = points[i].x - (time * 3);
-        if (x > -10 && x < canvas.width + 10) {
-          ctx.save();
-          ctx.shadowBlur = 15;
-          ctx.shadowColor = '#10b981';
-          ctx.fillRect(x - 2, points[i].y - 2, 4, 4);
-          ctx.restore();
-        }
-      }
-
-      // Remove old points
-      if (points.length > 0 && points[0].x - (time * 3) < -50) {
-        points.shift();
-      }
-
-      time++;
-      requestAnimationFrame(drawChart);
-    }
-
-    drawChart();
-  </script>
 </body>
 </html>
